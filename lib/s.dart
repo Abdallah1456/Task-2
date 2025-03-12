@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:task2/main.dart';
@@ -22,14 +23,14 @@ class Album {
   }
 }
 
-Future<Album> fetch_Instructions_Album() async {
+Future<Album> fetchAlbum() async {
   final response = await http.get(
-    Uri.parse('www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast'),
+    Uri.parse('https://www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata'),
   );
+
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    print(Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>));
     return Album.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   } else {
     // If the server did not return a 200 OK response,
@@ -38,20 +39,37 @@ Future<Album> fetch_Instructions_Album() async {
   }
 }
 
-class InstructionsScreen extends StatelessWidget{
-  const InstructionsScreen({super.key});
+class SearchScreen extends StatelessWidget{
+  const SearchScreen({super.key});
+
+
   @override
   Widget build(BuildContext context) {
+    TextEditingController text_controller = TextEditingController();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBarr("Instructions", context),
+        appBar: AppBarr("Search", context),
 
         backgroundColor: Colors.white12,
-        body: const Center(child:
-        Text("Category: Beef\nArea: British\nInstructions: Put the mushrooms into a food processor with some reasoning and pulse to a rough paste. "
-          , style: TextStyle(
-            color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 24),),),
+        body: const Padding(
+          padding: EdgeInsets.all(250.0),
+          child: Column( mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                style: TextStyle(color: Colors.white),
+                // controller: text_controller,
+                decoration: InputDecoration(
+                  fillColor: Colors.white,
+                  labelText: "Enter text", labelStyle: TextStyle(color: Colors.white),
+                  hintText: "Search something....", hintStyle: TextStyle(color: Colors.white),
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.search, color: Colors.white,),
+                ),
+              ),
+            ],
+          ),
+        ),
 
         bottomNavigationBar: BtnNav(context),
       ),

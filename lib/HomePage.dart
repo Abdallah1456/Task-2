@@ -9,8 +9,9 @@ class HomePageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBarr("HomePage"),
+        appBar: AppBarr("HomePage", context),
 
         backgroundColor: Colors.white12,
         body: ListView(children:[
@@ -18,11 +19,17 @@ class HomePageScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Column(mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text("What would you like to eat today?", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 16),),
-      
-                GestureDetector(onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const InstructionsScreen()),);
-                  },
+                const Text("What would you like to eat today?", style: TextStyle(color: Colors.grey,
+                    fontWeight: FontWeight.w700,fontSize: 16,height: 2),),
+
+                       GestureDetector(
+                      onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const InstructionsScreen()),);
+                fetchAlbum().then((value){
+                print(value.id);
+                print(value.title);
+                print(value.userId);
+                });},
 
                 child: Image.asset("assets/Beef.jpg", height: 280,), ),
                 const SizedBox(height: 10,),
@@ -54,7 +61,7 @@ class HomePageScreen extends StatelessWidget {
             ],),
           )
         ],),
-        bottomNavigationBar: BtnNav(),
+        bottomNavigationBar: BtnNav(context),
       ),
     );
   }
